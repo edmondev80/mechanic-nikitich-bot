@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Env
+.env
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+
+# SQLite
+*.db
+*.sqlite3
+
+# Конфиги и секреты
+.env
+*.env
+config.py
+
+# Логи
+*.log
+logs/
+*.bak
+
+# VS Code и другие IDE
+.vscode/
+.idea/
+*.swp
+
+# Docker
+*.tar
+.dockerignore
+
+# System
+.DS_Store
+Thumbs.db
+
+# Telegram bot service files
+*.service
+
+# Миграции (если ненужные)
+migrate_*.py
