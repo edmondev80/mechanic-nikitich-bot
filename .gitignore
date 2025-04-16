@@ -33,6 +33,10 @@ build/
 # Конфиги и секреты
 .env
 *.env
+<<<<<<< HEAD
+=======
+config.py
+>>>>>>> 🚀 Initial commit: clean and secure
 
 # Логи
 *.log
