@@ -33,7 +33,6 @@ build/
 # Конфиги и секреты
 .env
 *.env
-config.py
 
 # Логи
 *.log
