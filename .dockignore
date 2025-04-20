@@ -1,0 +1,22 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Editor settings
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Git
+.git
+.gitignore
+
+# Docker artifacts
+Dockerfile
+docker-compose.yml
+
+# Secrets
+.env
