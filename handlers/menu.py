@@ -437,6 +437,9 @@ async def cmd_start(message: types.Message, state: FSMContext):
 
 @router.message(MenuState.path)
 async def navigate_menu(message: types.Message, state: FSMContext):
+    if not message.text:
+        await message.answer("⚠️ Неверный формат сообщения. Отправьте текст.")
+        return
     user_text = message.text.strip().lower()
     if user_text in ["/search", "search", "/reset", "reset"]:
         await message.answer("⚠️ Для использования команды используйте /search или /reset, а не обычный текст.")
