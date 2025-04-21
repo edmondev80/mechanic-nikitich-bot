@@ -64,6 +64,10 @@ SYNONYMS = {
 def escape_html(text: str) -> str:
     return html.escape(text)
 
+def normalize(text: str) -> str:
+    return re.sub(r"[^\w\s]", "", text).strip().lower()
+
+
 def flatten_json(d, path=None):
     path = path or []
     flat = []
@@ -477,7 +481,7 @@ async def navigate_menu(message: types.Message, state: FSMContext):
         return
 
     current_node = get_node_from_path(current_path)
-    matching_key = next((key for key in current_node if key.lower() == user_text), None)
+    matching_key = next((key for key in current_node if normalize(key) == normalize(user_text)), None)
     if matching_key:
         user_text = matching_key
         # Проверка подписки для раздела "Ресеты"
