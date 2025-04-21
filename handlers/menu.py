@@ -31,6 +31,8 @@ from db import (
 )
 from config import BOT_TOKEN, AUTHORIZED_NUMBERS, ADMIN_IDS, BLOCK_DURATION, BASE_DIR
 from utils import DATA_JSON, FLAT_DATA
+from middlewares.auth import auth_required
+
 
 router = Router()
 logger = logging.getLogger(__name__)
@@ -332,12 +334,14 @@ async def help_command(message: types.Message):
     )
 
 @router.message(Command("search"))
+@auth_required
 async def start_search(message: types.Message, state: FSMContext):
     await state.set_state(MenuState.searching)
     await message.answer("🔎 Введите ключевое слово для поиска:", reply_markup=ReplyKeyboardRemove())
 
 
 @router.message(Command("reset"))
+@auth_required
 async def reset_auth(message: types.Message, state: FSMContext):
     from db import remove_user
     user_id = message.from_user.id
@@ -433,7 +437,11 @@ async def cmd_start(message: types.Message, state: FSMContext):
 
 @router.message(MenuState.path)
 async def navigate_menu(message: types.Message, state: FSMContext):
-    user_text = message.text
+    user_text = message.text.strip().lower()
+    if user_text in ["/search", "search", "/reset", "reset"]:
+        await message.answer("⚠️ Для использования команды используйте /search или /reset, а не обычный текст.")
+        return
+
     current_path = (await state.get_data()).get("path", [])
 
     if user_text == "🚪 Выйти":
@@ -536,29 +544,6 @@ async def navigate_menu(message: types.Message, state: FSMContext):
                 parse_mode="HTML",
                 reply_markup=generate_back_menu()
             )
-
-@router.message(F.text == "/search")
-async def manual_search(message: types.Message, state: FSMContext):
-    await start_search(message, state)
-
-@router.message(F.text == "/reset")
-async def manual_reset(message: types.Message, state: FSMContext):
-    await reset_auth(message, state)
-
-@router.message(Command("search"))
-async def start_search(message: types.Message, state: FSMContext):
-    await state.set_state(MenuState.searching)
-    await message.answer("🔎 Введите ключевое слово для поиска:", reply_markup=ReplyKeyboardRemove())
-
-
-@router.message(Command("reset"))
-async def reset_auth(message: types.Message, state: FSMContext):
-    from db import remove_user
-    user_id = message.from_user.id
-    remove_user(user_id)
-    await state.clear()
-    await message.answer("🔁 Авторизация сброшена.\n🔐 Введите табельный номер повторно:", reply_markup=ReplyKeyboardRemove())
-    await state.set_state(MenuState.authorized)
 
 @router.message(MenuState.authorized)
 async def handle_authorization(message: types.Message, state: FSMContext):
@@ -683,6 +668,11 @@ def check_still_authorized(user_id: int) -> bool:
 
 @router.message(MenuState.searching)
 async def handle_search(message: types.Message, state: FSMContext):
+    user_text = message.text.strip().lower()
+    if user_text in ["/search", "search", "/reset", "reset"]:
+        await message.answer("⚠️ Вы уже находитесь в режиме поиска. Введите ключевое слово или нажмите 'Назад'.")
+        return
+
     query = message.text.strip()
     matches = search_documents(query)
 
