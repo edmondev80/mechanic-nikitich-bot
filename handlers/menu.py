@@ -475,7 +475,9 @@ async def navigate_menu(message: types.Message, state: FSMContext):
         return
 
     current_node = get_node_from_path(current_path)
-    if current_node and user_text in current_node:
+    matching_key = next((key for key in current_node if key.lower() == user_text), None)
+    if matching_key:
+        user_text = matching_key
         # Проверка подписки для раздела "Ресеты"
             # Проверка подписки на раздел "Ресеты"
         if user_text.lower() == "ресеты":
