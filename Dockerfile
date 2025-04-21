@@ -13,6 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Копируем весь проект в контейнер
 COPY . /app
 
+<<<<<<< Updated upstream
+=======
+# Копируем .env отдельно (после COPY . /app)
+COPY .env /app/.env
+
+>>>>>>> Stashed changes
 # Переменная, чтобы вывод логов был виден сразу
 ENV PYTHONUNBUFFERED=1
 
