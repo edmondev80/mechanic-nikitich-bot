@@ -440,14 +440,16 @@ async def navigate_menu(message: types.Message, state: FSMContext):
     if not message.text:
         await message.answer("⚠️ Неверный формат сообщения. Отправьте текст.")
         return
-    user_text = message.text.strip().lower()
+    
+    user_text = message.text.strip()
+    user_text_lower = user_text.lower()
     if user_text in ["/search", "search", "/reset", "reset"]:
         await message.answer("⚠️ Для использования команды используйте /search или /reset, а не обычный текст.")
         return
 
     current_path = (await state.get_data()).get("path", [])
 
-    if user_text == "🚪 Выйти":
+    if user_text_lower in ["🚪 выйти", "выйти"]:
         await state.clear()
         await message.answer(
             "🔒 Вы вышли из системы.\n/start — чтобы войти снова",
@@ -456,7 +458,7 @@ async def navigate_menu(message: types.Message, state: FSMContext):
         )
         return
 
-    if user_text == "⬅ Назад":
+    elif user_text_lower in ["⬅ назад", "назад"]:
         if current_path:
             current_path.pop()
             await state.update_data(path=current_path)
@@ -464,7 +466,7 @@ async def navigate_menu(message: types.Message, state: FSMContext):
         await message.answer("📂 Назад", reply_markup=generate_menu(current_node, is_root=not current_path))
         return
 
-    if user_text == "🏠 Главное меню":
+    elif user_text_lower in ["🏠 главное меню", "главное меню"]:
         await state.update_data(path=[])
         await message.answer("🏠 Главное меню", reply_markup=generate_menu(DATA_JSON))
         return
