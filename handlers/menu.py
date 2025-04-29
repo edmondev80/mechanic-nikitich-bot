@@ -50,14 +50,14 @@ class MenuState(StatesGroup):
     waiting_for_selection = State()
 
 auth_attempts = {}
-MAX_AUTH_ATTEMPTS = 3
+MAX_AUTH_ATTEMPTS = 5
 INACTIVITY_TIMEOUT = 600
 LAST_ACTIVE = {}
 
 SYNONYMS = {
     "заправка": ["зарядка", "дозаправка"],
     "проверка": ["контроль", "диагностика", "испытание"],
-    "очистка": ["чистка", "мойка"],
+    "очистка": ["чистка", "мойка", "удаление"],
     "демонтаж": ["монтаж", "замена", "снятие", "установка"],
 }
 
