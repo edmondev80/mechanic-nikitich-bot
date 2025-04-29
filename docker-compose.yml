@@ -11,3 +11,5 @@ services:
       - .:/app
     working_dir: /app
     command: ["python", "bot.py"]
+    environment:
+     - RUN_IN_DOCKER=1

@@ -18,6 +18,10 @@ from config import (
     AUTHORIZED_NUMBERS,
 )
 
+if os.getenv("RUN_IN_DOCKER") != "1":
+    print("🚫 Запуск запрещён! Используйте Docker.")
+    sys.exit(1)
+
 # Инициализация базы данных и функций
 from db import init_db, clear_blocks, remove_expired_blocks
 from utils import DATA_JSON, FLAT_DATA  # Только глобальные переменные
